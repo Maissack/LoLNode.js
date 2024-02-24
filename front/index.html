@@ -13,7 +13,6 @@
         
         
         <select name="type">
-            <option value="" disabled selected>Choose type</option>
             <option value="marksmen">Marksmen</option>
             <option value="fighter">Fighter</option>
             <option value="support">Support</option>
@@ -24,6 +23,9 @@
         </select>
 
         <button onclick="sendChampion()">New Champion</button>
+
+        
+        <button onclick="seedChampions()">Seed Champions</button>
     </form>
     <h1>List Champions</h1>
     <div id="champions"></div>
@@ -60,6 +62,27 @@
             });
 
             window.location.href = 'index.html';
+        };
+
+        const seedChampions = async () => {
+            await fetch('http://localhost:3000/seed-champions', {
+                method: 'POST'
+            });
+
+            // Rafraîchir la liste des champions après le semis
+            fetch('http://localhost:3000/champions')
+                .then((response) => response.json())
+                .then((data) => {
+                    let champions = document.querySelector('#champions')
+                    champions.innerHTML = ""; // Effacer l'ancienne liste
+                    data.forEach(champion => {
+                        champions.innerHTML += `
+                        <a href="champion.html?id=${champion.id}">
+                        <h2>${champion.name}</h2>
+                        </a>
+                        `;
+                    });
+                });
         };
     </script>
 </body>

@@ -1,86 +1,88 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-
-
-const getChampions = (req, res) => {
-    prisma.champion.findMany()
-    .then((champions) => {
+const getChampions = async (req, res) => {
+    try {
+        const champions = await prisma.champion.findMany();
         res.json(champions);
-    })
-    .catch((error) => {
+    } catch (error) {
         res.json(error);
-    });
+    }
 };
 
-const getChampion = (req, res) => {
-    let id = Number(req.params.id);
-
-    prisma.champion.findUnique({
-        where: {
-            id: id
-        }
-    })
-    .then((champion) => {
+const getChampion = async (req, res) => {
+    try {
+        const id = Number(req.params.id);
+        const champion = await prisma.champion.findUnique({
+            where: {
+                id: id
+            }
+        });
         res.json(champion);
-    })
-    .catch((error) => {
+    } catch (error) {
         res.json(error);
-    });
+    }
 };
 
-const createChampion = (req, res) => {
-    let champion = req.body;
-
-    prisma.champion.create({
-        data: {
-            name: champion.name,
-            type: champion.type
-        }
-    })
-    .then((champion) => {
-        res.json(champion);
-    })
-    .catch((error) => {
+const createChampion = async (req, res) => {
+    try {
+        const champion = req.body;
+        const createdChampion = await prisma.champion.create({
+            data: {
+                name: champion.name,
+                type: champion.type
+            }
+        });
+        res.json(createdChampion);
+    } catch (error) {
         res.json(error);
-    });
+    }
 };
 
-const updateChampion = (req, res) => {
-    let id = Number(req.params.id);
-    let champion = req.body;
-
-    prisma.champion.update({
-        where: {
-            id: id
-        },
-        data: {
-            name: champion.name,
-            type: champion.type
-        }
-    })
-    .then((champion) => {
-        res.json(champion);
-    })
-    .catch((error) => {
+const updateChampion = async (req, res) => {
+    try {
+        const id = Number(req.params.id);
+        const champion = req.body;
+        const updatedChampion = await prisma.champion.update({
+            where: {
+                id: id
+            },
+            data: {
+                name: champion.name,
+                type: champion.type
+            }
+        });
+        res.json(updatedChampion);
+    } catch (error) {
         res.json(error);
-    });
+    }
 };
 
-const deleteChampion = (req, res) => {
-    let id = Number(req.params.id);
-
-    prisma.champion.delete({
-        where: {
-            id: id
-        }
-    })
-    .then((champion) => {
-        res.json(champion);
-    })
-    .catch((error) => {
+const deleteChampion = async (req, res) => {
+    try {
+        const id = Number(req.params.id);
+        const deletedChampion = await prisma.champion.delete({
+            where: {
+                id: id
+            }
+        });
+        res.json(deletedChampion);
+    } catch (error) {
         res.json(error);
-    });
+    }
+};
+
+// Fonction pour semer (seed) les champions depuis un fichier JSON
+const seedChampions = async (req, res) => {
+    try {
+        const championsData = require('../path/to/champions.json'); // Remplacez le chemin par le bon chemin de votre fichier JSON
+        const createdChampions = await prisma.champion.createMany({
+            data: championsData
+        });
+        res.json(createdChampions);
+    } catch (error) {
+        res.json(error);
+    }
 };
 
 module.exports = {
@@ -88,5 +90,6 @@ module.exports = {
     getChampion,
     createChampion,
     updateChampion,
-    deleteChampion
-  };
+    deleteChampion,
+    seedChampions // Ajout de la fonction seedChampions
+};
