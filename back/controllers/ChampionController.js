@@ -72,10 +72,10 @@ const deleteChampion = async (req, res) => {
     }
 };
 
-// Fonction pour semer (seed) les champions depuis un fichier JSON
+
 const seedChampions = async (req, res) => {
     try {
-        const championsData = require('../path/to/champions.json'); // Remplacez le chemin par le bon chemin de votre fichier JSON
+        const championsData = require('../champions.json'); 
         const createdChampions = await prisma.champion.createMany({
             data: championsData
         });
@@ -91,5 +91,5 @@ module.exports = {
     createChampion,
     updateChampion,
     deleteChampion,
-    seedChampions // Ajout de la fonction seedChampions
+    seedChampions 
 };

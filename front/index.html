@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Home</title>
 </head>
 
 <body>
@@ -69,12 +69,12 @@
                 method: 'POST'
             });
 
-            // Rafraîchir la liste des champions après le semis
+            
             fetch('http://localhost:3000/champions')
                 .then((response) => response.json())
                 .then((data) => {
                     let champions = document.querySelector('#champions')
-                    champions.innerHTML = ""; // Effacer l'ancienne liste
+                    champions.innerHTML = ""; 
                     data.forEach(champion => {
                         champions.innerHTML += `
                         <a href="champion.html?id=${champion.id}">

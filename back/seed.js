@@ -1,4 +1,3 @@
-// seed.js
 const { PrismaClient } = require('@prisma/client');
 const fs = require('fs/promises');
 
